@@ -1,9 +1,9 @@
 # Brain Tumor Auto-Segmentation (MRI)
 
-Brain tumor auto-segmentation using Magnetic Resonance Imaging (MRI). This project demonstrates data preprocessing, 3D sub-volume extraction, MRI standardization, and deep learning–based segmentation with Dice coefficient and soft Dice loss. Includes evaluation metrics (sensitivity, specificity) for tumor detection performance.
+Brain tumor auto-segmentation using Magnetic Resonance Imaging (MRI), This project demonstrates data preprocessing, 3D sub-volume extraction, MRI standardization and deep learning–based segmentation with Dice coefficient and soft Dice loss. Includes evaluation metrics (sensitivity, specificity) for tumor detection performance.
 
-Topics / Tags:
-python · deep-learning · tensorflow · keras · medical-imaging · mri · brain-tumor · segmentation · computer-vision · healthcare-ai
+## Topics / Tags
+`python` · `deep-learning` · `tensorflow` · `keras` · `medical-imaging` · `mri` · `brain-tumor` · `segmentation` · `computer-vision` · `healthcare-ai`
 
 # Brain Tumor MRI Segmentation
 
