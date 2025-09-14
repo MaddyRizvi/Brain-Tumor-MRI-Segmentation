@@ -1,69 +1,15 @@
 
 # coding: utf-8
 
-# <img src="https://miro.medium.com/max/2652/1*eTkBMyqdg9JodNcG_O4-Kw.jpeg" width="100%">
-# 
-# [Image Source](https://medium.com/stanford-ai-for-healthcare/its-a-no-brainer-deep-learning-for-brain-mr-images-f60116397472)
-# 
-# # Brain Tumor Auto-Segmentation for Magnetic Resonance Imaging (MRI)
-# Welcome to the final part of the "Artificial Intelligence for Medicine" course 1!
-# 
-# You will learn how to build a neural network to automatically segment tumor regions in brain, using [MRI (Magnetic Resonance Imaging](https://en.wikipedia.org/wiki/Magnetic_resonance_imaging)) scans.
-# 
-# The MRI scan is one of the most common image modalities that we encounter in the radiology field.  
-# Other data modalities include: 
-# - [Computer Tomography (CT)](https://en.wikipedia.org/wiki/CT_scan), 
-# - [Ultrasound](https://en.wikipedia.org/wiki/Ultrasound)
-# - [X-Rays](https://en.wikipedia.org/wiki/X-ray). 
-# 
-# In this assignment we will be focusing on MRIs but many of our learnings applies to other mentioned modalities as well.  We'll walk you through some of the steps of training a deep learning model for segmentation.
-# 
-# **You will learn:**
-# 
-# -   What is in an MR image
-# -   Standard data preparation techniques for MRI datasets
-# -   Metrics and loss functions for segmentation
-# -   Visualizing and evaluating segmentation models
-
-# ## Table of Contents
-# 
-# - [0. Packages](#0)
-# - [1. Dataset](#1)
-#   - [1.1 What is an MRI?](#1-1)
-#   - [1.2 MRI Data Processing](#1-2)
-#   - [1.3 Exploring the Dataset](#1-3)
-#   - [1.4 Data Preprocessing using Patches](#1-4)
-#     - [Exercise 1 - get_sub_volume](#ex-1)
-#     - [Exercise 2 - standardization](#ex-2)
-# - [2. 3D U-Net Model](#2)
-# - [3. Metrics](#3)
-#   - [3.1 Dice Coefficient](#3-1)
-#       - [Exercise 3 - single_class_dice_coefficient](#ex-3)
-#       - [3.1.1 Dice Coefficient for Multiple Classes](#3-1-1)
-#           - [Exercise 4 - dice_coefficient](#ex-4)
-#   - [3.2 Soft Dice Loss](#3-2)
-#       - [3.2.1 Multi-Class Soft Dice Loss](#3-2-1)
-#           - [Exercise 5 - soft_dice_loss](#ex-5)
-# - [4. Create and Train the Model](#4)
-#     - [4.1 Training on a Large Dataset](#4-1)
-#     - [4.2 Loading a Pre-Trained Model](#4-2)
-# - [5. Evaluation](#5)
-#   - [5.1 Overall Performance](#5-1)
-#   - [5.2 Patch-level Predictions](#5-2)
-#       - [5.2.1 Sensitivity and Specificity](#5-2-1)
-#           - [Exercise 6 - compute_class_sens_spec](#ex-6)
-#   - [5.3 Running on Entire Scans](#5-3)
-
-# <a name="0"></a>
 # ## Packages
 # 
-# In this assignment, we'll make use of the following packages:
+# In this file, we'll make use of the following packages:
 # 
 # - `keras` is a framework for building deep learning models.
 # - `keras.backend` allows us to perform math operations on tensors.
 # - `nibabel` will let us extract the images and labels from the files in our dataset.
 # - `numpy` is a library for mathematical and scientific operations.
-# -  `pandas` is what we'll use to manipulate our data.
+# - `pandas` is what we'll use to manipulate our data.
 # 
 # #### Import Packages
 # 
@@ -96,13 +42,13 @@ tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
 # 
 # Magnetic resonance imaging (MRI) is an advanced imaging technique that is used to observe a variety of diseases and parts of the body. 
 # 
-# As we will see later, neural networks can analyze these images individually (as a radiologist would) or combine them into a single 3D volume to make predictions.
+# Neural networks can analyze these images individually (as a radiologist would) or combine them into a single 3D volume to make predictions.
 # 
 # At a high level, MRI works by measuring the radio waves emitting by atoms subjected to a magnetic field. 
 # 
 # <img src="https://miro.medium.com/max/1740/1*yC1Bt3IOzNv8Pp7t1v7F1Q.png">
 # 
-# In this assignment, we'll build a multi-class segmentation model. We'll  identify 3 different abnormalities in each image: edemas, non-enhancing tumors, and enhancing tumors.
+# we'll build a multi-class segmentation model. We'll  identify 3 different abnormalities in each image: edemas, non-enhancing tumors, and enhancing tumors.
 # 
 # <a name="1-2"></a>
 
@@ -111,7 +57,7 @@ tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
 # We often encounter MR images in the [DICOM format](https://en.wikipedia.org/wiki/DICOM). 
 # - The DICMO format is the output format for most commercial MRI scanners. This type of data can be processed using the [pydicom](https://pydicom.github.io/pydicom/stable/getting_started.html) Python library. 
 # 
-# In this assignment, we will be using the data from the [Decathlon 10 Challenge](https://decathlon-10.grand-challenge.org). This data has been mostly pre-processed for the competition participants, however in real practice, MRI data needs to be significantly pre-preprocessed before we can use it to train our models.
+# we will be using the data from the [Decathlon 10 Challenge](https://decathlon-10.grand-challenge.org). This data has been mostly pre-processed for the competition participants, however in real practice, MRI data needs to be significantly pre-preprocessed before we can use it to train our models.
 
 # <a name="1-3"></a>
 # ### 1.3 Exploring the Dataset
@@ -206,8 +152,8 @@ util.visualize_data_gif(util.get_labeled_image(image, label))
 # Let's walk through these steps in the following exercises.
 
 # <a name="ex-1"></a>
-# ### Exercise 1 - get_sub_volume
 # 
+#
 # Fill in the function below takes in:
 # - a 4D image (shape: \[240, 240, 155, 4\])
 # - its 3D label (shape: \[240, 240, 155\]) arrays, 
@@ -228,7 +174,6 @@ util.visualize_data_gif(util.get_labeled_image(image, label))
 # </summary>
 # <p>
 # <ul>
-#     <li>Check the lecture notebook for a similar example in 1 dimension</li>
 #     <li>To check the ratio of background to the whole sub-volume, the numerator is the number of background labels in the sub-volume.  The last dimension of the label array at index 0 contains the labels to identify whether the voxel is a background (value of 1) or not a a background (value of 0).
 #         </li>
 #     <li>For the denominator of the background ratio, this is the volume of the output (see <code>output_x</code>, <code>output_y</code>, <code>output_z</code> in the function parameters).</li>
@@ -242,7 +187,7 @@ util.visualize_data_gif(util.get_labeled_image(image, label))
 # In[ ]:
 
 
-# UNQ_C1 (UNIQUE CELL IDENTIFIER, DO NOT EDIT)
+# UNQ_C1 (UNIQUE CELL IDENTIFIER)
 def get_sub_volume(image, label, 
                    orig_x = 240, orig_y = 240, orig_z = 155, 
                    output_x = 160, output_y = 160, output_z = 16,
@@ -301,7 +246,7 @@ def get_sub_volume(image, label,
         # (output_x, output_y, output_z, num_classes)
         y = None
 
-        # compute the background ratio (this has been implemented for you)
+        # compute the background ratio 
         bgrd_ratio = np.sum(y[:, :, :, 0])/(output_x * output_y * output_z)
 
         # increment tries counter
@@ -394,11 +339,10 @@ util.visualize_patch(X[0, :, :, :], y[2])
 
 # #### Expected output:
 # 
-# If your output does not match the expected image, run your `Excercise 1` **test cell** again, and then run the cell above again (meaning, run these 2 cells sequentially).
+# If your output does not match the expected image, run your code and then run the cell above again (meaning, run these 2 cells sequentially).
 # 
 # If it still does not match the expected output, then there's a mistake in your `Exercise 1`.
-# 
-# <img src="images/tumor_ex1.png" width="30%">
+
 
 # <a name="ex-2"></a>
 # ### Exercise 2 - standardization
@@ -498,7 +442,7 @@ util.visualize_patch(X_norm[0, :, :, :], y[2])
 # <a name="2"></a>
 # ## 2. 3D U-Net Model
 # 
-# Now let's build our model. In this assignment we will be building a [3D U-net](https://arxiv.org/abs/1606.06650). 
+# Now let's build our model. In this code we will be building a [3D U-net](https://arxiv.org/abs/1606.06650). 
 # - This architecture will take advantage of the volumetric shape of MR images and is one of the best performing models for this task. 
 # - Feel free to familiarize yourself with the architecture by reading [this paper](https://arxiv.org/abs/1606.06650).
 # 
@@ -538,10 +482,6 @@ util.visualize_patch(X_norm[0, :, :, :], y[2])
 # $$\text{DSC}(f, x, y) = \frac{2 \times \sum_{i, j} f(x)_{ij} \times y_{ij} + \epsilon}{\sum_{i,j} f(x)_{ij} + \sum_{i, j} y_{ij} + \epsilon}$$
 # 
 # - $\epsilon$ is a small number that is added to avoid division by zero
-# 
-# <img src="https://www.researchgate.net/publication/328671987/figure/fig4/AS:688210103529478@1541093483784/Calculation-of-the-Dice-similarity-coefficient-The-deformed-contour-of-the-liver-from.ppm" width="30%">
-# 
-# [Image Source](https://www.researchgate.net/figure/Calculation-of-the-Dice-similarity-coefficient-The-deformed-contour-of-the-liver-from_fig4_328671987)
 # 
 # <a name="ex-3"></a>
 # ### Exercise 3 - single_class_dice_coefficient
@@ -984,12 +924,10 @@ model = util.unet_model_3d(loss_function=soft_dice_loss, metrics=[dice_coefficie
 # 
 # To get a flavor of the training on the larger dataset, you can run the following cell to train the model on a small subset of the dataset (85 patches). You should see the loss going down and the dice coefficient going up. 
 # 
-# Running `model.fit()` on the Coursera workspace may cause the kernel to die.
 # - Soon, we will load a pre-trained version of this model, so that you don't need to train the model on this workspace.
 
 # ```Python
-# # Run this on your local machine only
-# # May cause the kernel to die if running in the Coursera platform
+# # Run this on your local machine 
 # 
 # base_dir = HOME_DIR + "processed/"
 # 
@@ -1075,9 +1013,6 @@ model.summary()
 # validation dice coefficient: 0.5152
 # ```
 # 
-# **NOTE:** Do not run the code shown above on the Coursera platform as it will exceed the platform's memory limitations. However, you can run the code shown above locally on your machine or in Colab to practice measuring the overall performance on the validation set.
-# 
-# Like we mentioned above, due to memory limitiations on the Coursera platform we won't be runing the above code, however, you should take note of the **expected output** below it. We should note that due to the randomness in choosing sub-volumes, the values for soft dice loss and dice coefficient will be different each time that you run it.
 
 # <a name="5-2"></a>
 # ### 5.2 Patch-level Predictions
