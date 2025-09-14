@@ -16,6 +16,11 @@ Brain tumor auto-segmentation using Magnetic Resonance Imaging (MRI), This proje
 
 > Deep learning pipeline for brain tumor auto-segmentation using MRI scans — includes preprocessing, Dice loss, and evaluation metrics.
 
+# Brain Tumor MRI AI Model
+
+![Image](https://github.com/user-attachments/assets/c6a2f182-b181-4156-bfbb-ad0429c597f4)
+
+*Source: [Stanford AI for Healthcare](https://medium.com/stanford-ai-for-healthcare/its-a-no-brainer-deep-learning-for-brain-mr-images-f60116397472)*
 
 ## Overview
 The project demonstrates how to:
